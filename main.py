@@ -47,30 +47,16 @@ def plot_reconstruction_error(scores, output_path):
 
 def main():
     ## Parse arguments
-    parser = argparse.ArgumentParser(
-        description='Fraud Detection using AutoEncoder (PyOD)'
-    )
-    parser.add_argument(
-        '--data', # thios would be the datasource file location
-        type=str,
-        required=True,
-        help='Path to the transactions CSV file'
-    )
-    parser.add_argument(
-        '--output_dir', # This is where to save the output
-        type=str,
-        default='output',
-        help='Directory to save logs, results, and plots'
-    )
+    parser = argparse.ArgumentParser(description='Fraud Detection using AutoEncoder (PyOD)')
+    parser.add_argument('--data', # thios would be the datasource file locationtype=str,required=True,help='Path to the transactions CSV file'
+                        )
+    parser.add_argument('--output_dir', # This is where to save the outputtype=str,default='output',help='Directory to save logs, results, and plots'
+                        )
     args = parser.parse_args()
 
     os.makedirs(args.output_dir, exist_ok=True) # Create output directory if it doesn't exist
 
-    logging.basicConfig(
-        filename=os.path.join(args.output_dir, 'run.log'),
-        level=logging.INFO,
-        format='%(asctime)s %(levelname)s %(message)s'
-    )
+    logging.basicConfig(filename=os.path.join(args.output_dir, 'run.log'),level=logging.INFO,format='%(asctime)s %(levelname)s %(message)s')
 
     ## Adding logging to output for better debugging
     logging.info('Loading data from %s', args.data)
@@ -80,9 +66,7 @@ def main():
     X, scaler = preprocess(df)
 
     logging.info('Splitting data into train and test sets')
-    X_train, X_test = train_test_split(
-        X, test_size=0.2, random_state=42
-    )
+    X_train, X_test = train_test_split(X, test_size=0.2, random_state=42)
 
     logging.info('Training AutoEncoder model')
     ae = train_autoencoder(X_train)
@@ -90,10 +74,8 @@ def main():
     logging.info('Detecting anomalies on test set')
     scores, labels = detect_anomalies(ae, X_test)
 
-    df_results = pd.DataFrame({ # Saving results to csv file
-        'reconstruction_error': scores,
-        'anomaly_label': labels
-    })
+    df_results = pd.DataFrame({ # Saving results to csv file'reconstruction_error': scores,'anomaly_label': labels
+        })
 
     results_csv = os.path.join(args.output_dir, 'results.csv')
     df_results.to_csv(results_csv, index=False)
